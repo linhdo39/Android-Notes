@@ -1,0 +1,15 @@
+<resources>
+    <string name="app_name">Android Notes</string>
+    <string name="about">About</string>
+    <string name="add_note">Add Note</string>
+    <string name="name">Name</string>
+    <string name="date_time">Time</string>
+    <string name="no_file">No JSON Product File Present</string>
+    <string name="file_name">Note.json</string>
+    <string name="description">Description</string>
+    <string name="save">Save</string>
+    <string name="note_s_name">Note\'s Name</string>
+    <string name="android_notes">Android Notes</string>
+    <string name="info">© 2021, Linh Do</string>
+    <string name="version"> Version 1.0</string>
+</resources>
