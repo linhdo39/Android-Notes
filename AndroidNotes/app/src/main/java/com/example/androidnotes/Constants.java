@@ -7,18 +7,19 @@ import java.util.Locale;
 
 public class Constants {
     private static String DateFormat = "MM/dd/yyyy HH:mm:ss";
+    private static String SimpleDateFormat = "MM/dd/yyyy";
     public static Date stringToDate(String dateStr) throws ParseException {
 
         SimpleDateFormat sdf = new SimpleDateFormat(DateFormat);
         return sdf.parse(dateStr);
     }
     public static String dateToString(Date date) {
-        SimpleDateFormat formatter = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss", Locale.US);
+        SimpleDateFormat formatter = new SimpleDateFormat(DateFormat, Locale.US);
         return formatter.format(date);
     }
 
     public static String dateToSimpleString(Date date) {
-        SimpleDateFormat formatter = new SimpleDateFormat("MM/dd/yyyy", Locale.US);
+        SimpleDateFormat formatter = new SimpleDateFormat(SimpleDateFormat, Locale.US);
         return formatter.format(date);
     }
     public static int GetLineCount(String str) {
