@@ -28,6 +28,10 @@ public class Note implements Serializable{
     }
 
     String getTime(){
+        return Constants.dateToString(time);
+    }
+
+    String getShortTime(){
         return Constants.dateToSimpleString(time);
     }
 

@@ -21,4 +21,16 @@ public class Constants {
         SimpleDateFormat formatter = new SimpleDateFormat("MM/dd/yyyy", Locale.US);
         return formatter.format(date);
     }
+    public static int GetLineCount(String str) {
+        String[] lines = str.split("\r\n|\r|\n");
+        return  lines.length;
+    }
+    public static String GetSubLines(String str, int lineCount) {
+        String[] lines = str.split("\r\n|\r|\n");
+        StringBuilder sb = new StringBuilder();
+        for(int i = 0; i < Math.min(lineCount, lines.length); i++) {
+            sb.append(lines[i] + "\n");
+        }
+        return sb.toString();
+    }
 }
