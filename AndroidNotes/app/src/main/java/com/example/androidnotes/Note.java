@@ -7,12 +7,13 @@ import androidx.annotation.NonNull;
 import java.io.IOException;
 import java.io.Serializable;
 import java.io.StringWriter;
+import java.util.Date;
 
 public class Note implements Serializable{
     private final String name;
     private final String description;
-    private final String time;
-    public Note(String name, String time, String description) {
+    private final Date time;
+    public Note(String name, Date time, String description) {
         this.name = name;
         this.time = time;
         this.description = description;
@@ -27,7 +28,7 @@ public class Note implements Serializable{
     }
 
     String getTime(){
-        return time;
+        return Constants.dateToSimpleString(time);
     }
 
     @NonNull

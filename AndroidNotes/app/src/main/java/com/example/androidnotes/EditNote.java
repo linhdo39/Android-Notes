@@ -80,8 +80,7 @@ public class EditNote extends AppCompatActivity {
             String d1Text = name.getText().toString();
             String d2Text = description.getText().toString();
             int position = getIntent().getIntExtra("position", 0);
-            SimpleDateFormat formatter = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss", Locale.US);
-            String time = formatter.format(new Date());
+            Date time = new Date();
             Note editNote = new Note(d1Text, time, d2Text);
             Intent data = new Intent();
             data.putExtra("edit", editNote);

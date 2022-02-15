@@ -61,8 +61,7 @@ public class AddNote extends AppCompatActivity {
         if(checkNull()) {
             String d1Text = name.getText().toString();
             String d2Text = description.getText().toString();
-            SimpleDateFormat formatter = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss", Locale.US);
-            String time = formatter.format(new Date());
+            Date time = new Date();
             Note newNote = new Note(d1Text, time, d2Text);
             Intent data = new Intent();
             Log.d("AddNote", newNote.toString());
