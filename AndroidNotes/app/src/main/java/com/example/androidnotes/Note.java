@@ -4,6 +4,8 @@ import android.util.JsonWriter;
 
 import androidx.annotation.NonNull;
 
+import org.joda.time.DateTime;
+
 import java.io.IOException;
 import java.io.Serializable;
 import java.io.StringWriter;
@@ -12,8 +14,8 @@ import java.util.Date;
 public class Note implements Serializable{
     private final String name;
     private final String description;
-    private final Date time;
-    public Note(String name, Date time, String description) {
+    private final DateTime time;
+    public Note(String name, DateTime time, String description) {
         this.name = name;
         this.time = time;
         this.description = description;

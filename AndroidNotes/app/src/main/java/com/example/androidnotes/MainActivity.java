@@ -17,6 +17,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
+import org.joda.time.DateTime;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -171,7 +172,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             for (int i = 0; i < jsonArray.length(); i++) {
                 JSONObject jsonObject = jsonArray.getJSONObject(i);
                 String name = jsonObject.getString("name");
-                Date time = Constants.stringToDate(jsonObject.getString("date"));
+                DateTime time = Constants.stringToDate(jsonObject.getString("date"));
                 String desc = jsonObject.getString("description");
                 Note note = new Note(name, time, desc);
                 temp.add(note);
