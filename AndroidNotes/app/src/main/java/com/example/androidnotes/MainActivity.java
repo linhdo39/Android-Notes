@@ -43,7 +43,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        noteList.addAll(loadFile());
+        noteList.addAll(loadFile().stream().sorted((x, y) -> x.getRawTime() < y.getRawTime()));
         if(!noteList.isEmpty())
             setTitle("Android Notes (" + noteList.size()+")");
         recyclerView = findViewById(R.id.noteView);

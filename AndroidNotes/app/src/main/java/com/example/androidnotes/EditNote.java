@@ -45,11 +45,14 @@ public class EditNote extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == R.id.save) {
-            if(checkChange()) {
+        int selection = item.getItemId();
+        switch(selection) {
+            case R.id.save:
                 doReturnData(null);
-                return true;
-            }
+                break;
+            case R.id.cancel:
+                this.onBackPressed();
+                break;
         }
         return false;
     }

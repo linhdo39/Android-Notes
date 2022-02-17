@@ -57,4 +57,8 @@ public class Note implements Serializable{
 
         return "";
     }
+
+    public DateTime getRawTime() {
+        return time;
+    }
 }

@@ -39,8 +39,14 @@ public class AddNote extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == R.id.save) {
-            doReturnData(null);
+        int selection = item.getItemId();
+        switch(selection) {
+            case R.id.save:
+                doReturnData(null);
+                break;
+            case R.id.cancel:
+                this.onBackPressed();
+                break;
         }
         return false;
     }
