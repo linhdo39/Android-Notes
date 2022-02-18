@@ -17,6 +17,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
+import org.joda.time.DateTime;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -28,6 +29,8 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.stream.Collectors;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener, View.OnLongClickListener{
     private static final String TAG = "MainActivity";
@@ -41,7 +44,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        noteList.addAll(loadFile());
+        noteList.addAll(loadFile().stream().sorted((x, y) -> y.getRawTime().compareTo(x.getRawTime())).collect(Collectors.toList()));
+        //noteList.addAll(loadFile());
         if(!noteList.isEmpty())
             setTitle("Android Notes (" + noteList.size()+")");
         recyclerView = findViewById(R.id.noteView);
@@ -170,7 +174,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             for (int i = 0; i < jsonArray.length(); i++) {
                 JSONObject jsonObject = jsonArray.getJSONObject(i);
                 String name = jsonObject.getString("name");
-                String time = jsonObject.getString("date");
+                DateTime time = Constants.stringToDate(jsonObject.getString("date"));
                 String desc = jsonObject.getString("description");
                 Note note = new Note(name, time, desc);
                 temp.add(note);
