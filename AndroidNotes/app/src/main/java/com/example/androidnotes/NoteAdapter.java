@@ -43,11 +43,20 @@ public class NoteAdapter extends RecyclerView.Adapter<ViewHolder> {
         Note note = noteList.get(position);
         String des = note.getDescription();
         holder.name.setText(note.getName());
-        if(des.length()>=80)
-            holder.description.setText(des.substring(0, Math.min(des.length(), 80)) +"...");
-        else
-            holder.description.setText(des);
-        holder.date.setText(new Date().toString());
+
+        if(des.length()>=80) {
+            des = des.substring(0, 80) + "...";
+        }
+
+        int lineCount = Constants.GetLineCount(des);
+        if(lineCount > 3) {
+            des = Constants.GetSubLines(des, 3);
+        }
+
+        holder.description.setText(des);
+
+        //holder.date.setText(new Date().toString());
+        holder.date.setText(note.getShortTime());
     }
 
     @Override

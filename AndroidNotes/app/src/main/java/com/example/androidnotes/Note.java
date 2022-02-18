@@ -4,15 +4,18 @@ import android.util.JsonWriter;
 
 import androidx.annotation.NonNull;
 
+import org.joda.time.DateTime;
+
 import java.io.IOException;
 import java.io.Serializable;
 import java.io.StringWriter;
+import java.util.Date;
 
 public class Note implements Serializable{
     private final String name;
     private final String description;
-    private final String time;
-    public Note(String name, String time, String description) {
+    private final DateTime time;
+    public Note(String name, DateTime time, String description) {
         this.name = name;
         this.time = time;
         this.description = description;
@@ -27,7 +30,11 @@ public class Note implements Serializable{
     }
 
     String getTime(){
-        return time;
+        return Constants.dateToString(time);
+    }
+
+    String getShortTime(){
+        return Constants.dateToSimpleString(time);
     }
 
     @NonNull
@@ -49,5 +56,9 @@ public class Note implements Serializable{
         }
 
         return "";
+    }
+
+    public DateTime getRawTime() {
+        return time;
     }
 }
