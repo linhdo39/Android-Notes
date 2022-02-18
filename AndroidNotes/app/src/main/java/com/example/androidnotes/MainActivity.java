@@ -3,8 +3,10 @@ package com.example.androidnotes;
 import androidx.activity.result.ActivityResult;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -32,7 +34,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.stream.Collectors;
 
-public class MainActivity extends AppCompatActivity implements View.OnClickListener, View.OnLongClickListener{
+public class MainActivity extends AppCompatActivity implements View.OnClickListener, View.OnLongClickListener {
     private static final String TAG = "MainActivity";
     private RecyclerView recyclerView;
     private NoteAdapter adapter;
@@ -44,14 +46,17 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+
         noteList.addAll(loadFile().stream().sorted((x, y) -> y.getRawTime().compareTo(x.getRawTime())).collect(Collectors.toList()));
         //noteList.addAll(loadFile());
         if(!noteList.isEmpty())
             setTitle("Android Notes (" + noteList.size()+")");
+
         recyclerView = findViewById(R.id.noteView);
         adapter = new NoteAdapter(noteList, this);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        new ItemTouchHelper(itemTouchHelperCallback).attachToRecyclerView(recyclerView);
         resultLauncher = registerForActivityResult(
                 new ActivityResultContracts.StartActivityForResult(),
                 this::handleNewNote);
@@ -90,21 +95,19 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         if (result.getResultCode() == Activity.RESULT_OK) {
             if (data.hasExtra("new")) {
                 Note newNote = (Note) data.getSerializableExtra("new");
-                noteList.add(0,newNote);
+                noteList.add(0, newNote);
                 saveNote();
                 adapter.notifyItemInserted(0);
-            }
-            else if(data.hasExtra("edit") && data.hasExtra("pos")){
+            } else if (data.hasExtra("edit") && data.hasExtra("pos")) {
                 Note editNote = (Note) data.getSerializableExtra("edit");
-                int pos = data.getIntExtra("pos",0);
+                int pos = data.getIntExtra("pos", 0);
                 noteList.remove(pos);
                 adapter.notifyItemRemoved(pos);
-                noteList.add(0,editNote);
+                noteList.add(0, editNote);
                 adapter.notifyItemInserted(0);
                 saveNote();
-            }
-            else
-                Log.d(TAG,"handleNewNote: no new note");
+            } else
+                Log.d(TAG, "handleNewNote: no new note");
         }
     }
 
@@ -112,8 +115,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     protected void onResume() {
         noteList.clear();
         noteList.addAll(loadFile());
-        if(!noteList.isEmpty())
-            setTitle("Android Notes (" + noteList.size()+")");
+        if (!noteList.isEmpty())
+            setTitle("Android Notes (" + noteList.size() + ")");
         super.onResume();
 
     }
@@ -140,18 +143,19 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         Note m = noteList.get(pos);
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Delete note " + m.getName() + "?");
-        builder.setPositiveButton("Yes", (dialog, id) -> deleteNote(m,pos));
+        builder.setPositiveButton("Yes", (dialog, id) -> deleteNote(m, pos));
         builder.setNegativeButton("No", (dialog, id) -> Log.d(TAG, "Nothing Change"));
         AlertDialog dialog = builder.create();
         dialog.show();
         return false;
     }
 
-    public void deleteNote(Note temp, int position){
+    public void deleteNote(Note temp, int position) {
         noteList.remove(temp);
         saveNote();
         adapter.notifyItemRemoved(position);
     }
+
 
     @Override
     public void onBackPressed() {
@@ -180,17 +184,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 temp.add(note);
             }
         } catch (FileNotFoundException e) {
-            Log.d(TAG,"loadJson: no Json file");
-        }
-        catch (Exception e) {
+            Log.d(TAG, "loadJson: no Json file");
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return temp;
     }
 
     private void saveNote() {
-        if(!noteList.isEmpty())
-            setTitle("Android Notes (" + noteList.size()+")");
+        if (!noteList.isEmpty())
+            setTitle("Android Notes (" + noteList.size() + ")");
         else
             setTitle("Android Notes");
         try {
@@ -205,4 +208,19 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             e.getStackTrace();
         }
     }
+
+    ItemTouchHelper.SimpleCallback itemTouchHelperCallback = new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.RIGHT | ItemTouchHelper.LEFT) {
+        @Override
+        public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
+            return false;
+        }
+
+        @Override
+        public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
+            deleteNote(noteList.get(viewHolder.getAdapterPosition()), viewHolder.getAdapterPosition());
+            adapter.notifyDataSetChanged();
+            saveNote();
+        }
+    };
+
 }
