@@ -12,6 +12,8 @@ import android.widget.Toast;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import org.joda.time.DateTime;
+
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
@@ -37,8 +39,14 @@ public class AddNote extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == R.id.save) {
-            doReturnData(null);
+        int selection = item.getItemId();
+        switch(selection) {
+            case R.id.save:
+                doReturnData(null);
+                break;
+            case R.id.cancel:
+                this.onBackPressed();
+                break;
         }
         return false;
     }
@@ -61,8 +69,7 @@ public class AddNote extends AppCompatActivity {
         if(checkNull()) {
             String d1Text = name.getText().toString();
             String d2Text = description.getText().toString();
-            SimpleDateFormat formatter = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss", Locale.US);
-            String time = formatter.format(new Date());
+            DateTime time = new DateTime();
             Note newNote = new Note(d1Text, time, d2Text);
             Intent data = new Intent();
             Log.d("AddNote", newNote.toString());
