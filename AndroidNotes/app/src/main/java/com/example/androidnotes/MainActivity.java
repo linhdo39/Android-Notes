@@ -211,8 +211,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         @Override
         public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
-            noteList.remove(viewHolder.getAdapterPosition());
+            deleteNote(noteList.get(viewHolder.getAdapterPosition()), viewHolder.getAdapterPosition());
             adapter.notifyDataSetChanged();
+            saveNote();
         }
     };
 
