@@ -18,6 +18,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toast;
 
 import org.joda.time.DateTime;
 import org.json.JSONArray;
@@ -31,7 +32,6 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.stream.Collectors;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener, View.OnLongClickListener {
@@ -39,6 +39,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private RecyclerView recyclerView;
     private NoteAdapter adapter;
     private final ArrayList<Note> noteList = new ArrayList<>();
+    private final ArrayList<Note> deleteList = new ArrayList<>();
     private ActivityResultLauncher<Intent> resultLauncher;
 
     @Override
@@ -79,9 +80,25 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             Intent intent = new Intent(this, About.class);
             startActivity(intent);
             return true;
+        } else if (item.getItemId() == R.id.undo) {
+            UndoDelete();
+            return true;
         } else {
             return super.onOptionsItemSelected(item);
         }
+    }
+
+    private void UndoDelete() {
+        if(deleteList.size() == 0) {
+            Toast.makeText(this, "No deleted note available", Toast.LENGTH_LONG).show();
+            return;
+        }
+        Note undoNote = deleteList.get(0);
+        int pos = undoNote.getPosition();
+        noteList.add(pos, undoNote);
+        deleteList.remove(undoNote);
+        adapter.notifyItemInserted(pos);
+        saveNote();
     }
 
     public void handleNewNote(ActivityResult result) {
@@ -115,6 +132,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     protected void onResume() {
         noteList.clear();
         noteList.addAll(loadFile());
+        deleteList.addAll(loadDelete());
         if (!noteList.isEmpty())
             setTitle("Android Notes (" + noteList.size() + ")");
         super.onResume();
@@ -151,6 +169,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     public void deleteNote(Note temp, int position) {
+        temp.setPosition((noteList.indexOf(temp)));
+        deleteList.add(temp);
         noteList.remove(temp);
         saveNote();
         adapter.notifyItemRemoved(position);
@@ -184,7 +204,37 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 temp.add(note);
             }
         } catch (FileNotFoundException e) {
-            Log.d(TAG, "loadJson: no Json file");
+            Log.d(TAG, "loadNotesJson: no Json file");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return temp;
+    }
+
+    private ArrayList<Note> loadDelete() {
+        ArrayList<Note> temp = new ArrayList<>();
+        try {
+            InputStream is = getApplicationContext().openFileInput(getString(R.string.delete_file_name));
+            BufferedReader reader = new BufferedReader(new InputStreamReader(is, StandardCharsets.UTF_8));
+
+            StringBuilder sb = new StringBuilder();
+            String line;
+            while ((line = reader.readLine()) != null) {
+                sb.append(line);
+            }
+
+            JSONArray jsonArray = new JSONArray(sb.toString());
+            for (int i = 0; i < jsonArray.length(); i++) {
+                JSONObject jsonObject = jsonArray.getJSONObject(i);
+                String name = jsonObject.getString("name");
+                DateTime time = Constants.stringToDate(jsonObject.getString("date"));
+                String desc = jsonObject.getString("description");
+                Note note = new Note(name, time, desc);
+                note.setPosition(jsonObject.getInt("pos"));
+                temp.add(note);
+            }
+        } catch (FileNotFoundException e) {
+            Log.d(TAG, "loadDeleteJson: no Json file");
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -199,11 +249,17 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         try {
             FileOutputStream fos = getApplicationContext().
                     openFileOutput(getString(R.string.file_name), Context.MODE_PRIVATE);
-
             PrintWriter printWriter = new PrintWriter(fos);
             printWriter.print(noteList);
             printWriter.close();
             fos.close();
+
+            FileOutputStream fos2 = getApplicationContext().
+                    openFileOutput(getString(R.string.delete_file_name), Context.MODE_PRIVATE);
+            PrintWriter printWriter2 = new PrintWriter(fos2);
+            printWriter2.print(deleteList);
+            printWriter2.close();
+            fos2.close();
         } catch (Exception e) {
             e.getStackTrace();
         }
