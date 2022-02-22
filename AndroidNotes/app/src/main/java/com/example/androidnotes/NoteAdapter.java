@@ -8,12 +8,11 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import java.util.Date;
 import java.util.List;
 
 public class NoteAdapter extends RecyclerView.Adapter<ViewHolder> {
 
-    private static final String TAG = "EmployeesAdapter";
+    private static final String TAG = "NoteAdapter";
     private final List<Note> noteList;
     private final MainActivity mainAct;
 
