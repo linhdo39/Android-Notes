@@ -15,6 +15,7 @@ public class Note implements Serializable{
     private final String name;
     private final String description;
     private final DateTime time;
+    private int pos;
     public Note(String name, DateTime time, String description) {
         this.name = name;
         this.time = time;
@@ -24,18 +25,17 @@ public class Note implements Serializable{
     String getDescription() {
         return description;
     }
-
     String getName() {
         return name;
     }
-
     String getTime(){
         return Constants.dateToString(time);
     }
-
     String getShortTime(){
         return Constants.dateToSimpleString(time);
     }
+    void setPosition(int pos){this.pos = pos;}
+    int getPosition(){return pos;}
 
     @NonNull
     public String toString() {
@@ -48,6 +48,7 @@ public class Note implements Serializable{
             jsonWriter.name("name").value(getName());
             jsonWriter.name("date").value(getTime());
             jsonWriter.name("description").value(getDescription());
+            jsonWriter.name("pos").value(getPosition());
             jsonWriter.endObject();
             jsonWriter.close();
             return sw.toString();
