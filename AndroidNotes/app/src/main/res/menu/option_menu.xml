@@ -6,10 +6,14 @@
         android:id="@+id/about"
         android:icon="@android:drawable/ic_dialog_info"
         android:title="@string/about"
-        app:showAsAction="always" />
+        app:showAsAction="ifRoom" />
     <item
         android:id="@+id/add"
         android:icon="@android:drawable/ic_input_add"
         android:title="@string/add_note"
-        app:showAsAction="always" />
+        app:showAsAction="collapseActionView" />
+    <item
+        android:id="@+id/undo"
+        android:title="@string/undo"
+        app:showAsAction="collapseActionView" />
 </menu>
