@@ -20,6 +20,10 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
+import com.example.androidnotes.extensions.FileWrapper;
+import com.example.androidnotes.repository.NoteRepository;
+import com.example.androidnotes.repository.NoteRepositoryImpl;
+
 import org.joda.time.DateTime;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -41,12 +45,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private final ArrayList<Note> noteList = new ArrayList<>();
     private final ArrayList<Note> deleteList = new ArrayList<>();
     private ActivityResultLauncher<Intent> resultLauncher;
+    private NoteRepository notesRepository;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
+        FileWrapper wrapper = new FileWrapper(this);
+        notesRepository = new NoteRepositoryImpl(wrapper);
 
         noteList.addAll(loadFile().stream().sorted((x, y) -> y.getRawTime().compareTo(x.getRawTime())).collect(Collectors.toList()));
         //noteList.addAll(loadFile());
@@ -183,62 +189,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private ArrayList<Note> loadFile() {
-        ArrayList<Note> temp = new ArrayList<>();
-        try {
-            InputStream is = getApplicationContext().openFileInput(getString(R.string.file_name));
-            BufferedReader reader = new BufferedReader(new InputStreamReader(is, StandardCharsets.UTF_8));
-
-            StringBuilder sb = new StringBuilder();
-            String line;
-            while ((line = reader.readLine()) != null) {
-                sb.append(line);
-            }
-
-            JSONArray jsonArray = new JSONArray(sb.toString());
-            for (int i = 0; i < jsonArray.length(); i++) {
-                JSONObject jsonObject = jsonArray.getJSONObject(i);
-                String name = jsonObject.getString("name");
-                DateTime time = Constants.stringToDate(jsonObject.getString("date"));
-                String desc = jsonObject.getString("description");
-                Note note = new Note(name, time, desc);
-                temp.add(note);
-            }
-        } catch (FileNotFoundException e) {
-            Log.d(TAG, "loadNotesJson: no Json file");
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return temp;
+        return notesRepository.loadNotes(R.string.file_name);
     }
 
     private ArrayList<Note> loadDelete() {
-        ArrayList<Note> temp = new ArrayList<>();
-        try {
-            InputStream is = getApplicationContext().openFileInput(getString(R.string.delete_file_name));
-            BufferedReader reader = new BufferedReader(new InputStreamReader(is, StandardCharsets.UTF_8));
-
-            StringBuilder sb = new StringBuilder();
-            String line;
-            while ((line = reader.readLine()) != null) {
-                sb.append(line);
-            }
-
-            JSONArray jsonArray = new JSONArray(sb.toString());
-            for (int i = 0; i < jsonArray.length(); i++) {
-                JSONObject jsonObject = jsonArray.getJSONObject(i);
-                String name = jsonObject.getString("name");
-                DateTime time = Constants.stringToDate(jsonObject.getString("date"));
-                String desc = jsonObject.getString("description");
-                Note note = new Note(name, time, desc);
-                note.setPosition(jsonObject.getInt("pos"));
-                temp.add(note);
-            }
-        } catch (FileNotFoundException e) {
-            Log.d(TAG, "loadDeleteJson: no Json file");
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return temp;
+        return notesRepository.loadNotes(R.string.delete_file_name);
     }
 
     private void saveNote() {
