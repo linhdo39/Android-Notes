@@ -1,13 +1,10 @@
-package com.example.androidnotes;
+package com.example.androidnotes.extensions;
 
 import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 
-import java.util.Arrays;
-import java.util.stream.Collectors;
-
-public class Constants {
+public class DateExtensions {
     private static final String DateFormat = "MM/dd/yyyy HH:mm:ss";
 
     public static DateTime stringToDate(String dateStr)  {
@@ -24,14 +21,5 @@ public class Constants {
         String simpleDateFormat = "MM/dd/yyyy";
         DateTimeFormatter sdf = DateTimeFormat.forPattern(simpleDateFormat);
         return date.toString(sdf);
-    }
-    public static int GetLineCount(String str) {
-        String[] lines = str.split("\r\n|\r|\n");
-        return  lines.length;
-    }
-    public static String GetSubLines(String str, int lineCount) {
-        String[] lines = str.split("\r\n|\r|\n");
-
-        return Arrays.stream(lines).limit(lineCount).collect(Collectors.joining("\n"));
     }
 }

@@ -1,6 +1,5 @@
 package com.example.androidnotes.extensions;
 
-import com.example.androidnotes.Constants;
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonElement;
@@ -17,11 +16,11 @@ public class DateTimeDeserializer
         implements JsonDeserializer<DateTime>, JsonSerializer<DateTime> {
     @Override
     public DateTime deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
-            return Constants.stringToDate(json.getAsString());
+            return DateExtensions.stringToDate(json.getAsString());
     }
 
     @Override
     public JsonElement serialize(DateTime src, Type typeOfSrc, JsonSerializationContext context) {
-        return new JsonPrimitive(Constants.dateToString(src));
+        return new JsonPrimitive(DateExtensions.dateToString(src));
     }
 }
