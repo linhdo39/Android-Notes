@@ -7,9 +7,9 @@ import androidx.recyclerview.widget.RecyclerView;
 
 public class ViewHolder extends RecyclerView.ViewHolder {
 
-    public TextView name;
-    TextView description;
-    TextView date;
+    final TextView name;
+    final TextView description;
+    final TextView date;
 
     ViewHolder(View view) {
         super(view);

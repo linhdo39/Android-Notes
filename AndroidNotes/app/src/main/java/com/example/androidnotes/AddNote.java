@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -40,7 +39,7 @@ public class AddNote extends AppCompatActivity {
         int selection = item.getItemId();
         switch(selection) {
             case R.id.save:
-                doReturnData(null);
+                doReturnData();
                 break;
             case R.id.cancel:
                 this.onBackPressed();
@@ -63,7 +62,9 @@ public class AddNote extends AppCompatActivity {
         return true;
     }
 
-    public void doReturnData(View v) {
+
+
+    public void doReturnData() {
         if(checkNull()) {
             String d1Text = name.getText().toString();
             String d2Text = description.getText().toString();
@@ -85,7 +86,7 @@ public class AddNote extends AppCompatActivity {
             builder.setMessage("Do you want to save '" + name.getText().toString() +"'?");
         else
             builder.setMessage("Do you want to save this note?");
-        builder.setPositiveButton("Yes", (dialog, id) -> doReturnData(null));
+        builder.setPositiveButton("Yes", (dialog, id) -> doReturnData());
         builder.setNegativeButton("No", (dialog, id) -> finish());
         AlertDialog dialog = builder.create();
         dialog.show();

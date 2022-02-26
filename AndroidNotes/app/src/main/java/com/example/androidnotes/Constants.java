@@ -32,7 +32,6 @@ public class Constants {
     public static String GetSubLines(String str, int lineCount) {
         String[] lines = str.split("\r\n|\r|\n");
 
-        return String.join("\n",
-                Arrays.stream(lines).limit(lineCount).collect(Collectors.toList()));
+        return Arrays.stream(lines).limit(lineCount).collect(Collectors.joining("\n"));
     }
 }

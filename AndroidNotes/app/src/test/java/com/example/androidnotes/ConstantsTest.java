@@ -6,8 +6,6 @@ import org.joda.time.DateTime;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import java.text.ParseException;
-
 import junitparams.JUnitParamsRunner;
 import junitparams.Parameters;
 
@@ -27,7 +25,7 @@ public class ConstantsTest {
                              int dayOfMonth,
                              int hourOfDay,
                              int minuteOfHour,
-                             int secondOfMinute) throws ParseException {
+                             int secondOfMinute)  {
         DateTime expected = new DateTime(year, monthOfYear, dayOfMonth, hourOfDay, minuteOfHour, secondOfMinute);
 
         DateTime actual = Constants.stringToDate(value);
