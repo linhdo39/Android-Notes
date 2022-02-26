@@ -8,6 +8,8 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.androidnotes.entities.Note;
+
 import java.util.List;
 
 public class NoteAdapter extends RecyclerView.Adapter<ViewHolder> {

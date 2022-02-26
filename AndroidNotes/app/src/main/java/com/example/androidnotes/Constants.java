@@ -4,17 +4,13 @@ import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Arrays;
-import java.util.Date;
-import java.util.Locale;
 import java.util.stream.Collectors;
 
 public class Constants {
-    private static String DateFormat = "MM/dd/yyyy HH:mm:ss";
-    private static String SimpleDateFormat = "MM/dd/yyyy";
-    public static DateTime stringToDate(String dateStr) throws ParseException {
+    private static final String DateFormat = "MM/dd/yyyy HH:mm:ss";
+
+    public static DateTime stringToDate(String dateStr)  {
         DateTimeFormatter sdf = DateTimeFormat.forPattern(DateFormat);
         return sdf.parseDateTime(dateStr);
     }
@@ -25,7 +21,8 @@ public class Constants {
 
     public static String dateToSimpleString(DateTime date) {
 
-        DateTimeFormatter sdf = DateTimeFormat.forPattern(SimpleDateFormat);
+        String simpleDateFormat = "MM/dd/yyyy";
+        DateTimeFormatter sdf = DateTimeFormat.forPattern(simpleDateFormat);
         return date.toString(sdf);
     }
     public static int GetLineCount(String str) {

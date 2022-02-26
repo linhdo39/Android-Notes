@@ -11,7 +11,6 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -20,21 +19,11 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
+import com.example.androidnotes.entities.Note;
 import com.example.androidnotes.extensions.FileWrapper;
 import com.example.androidnotes.repository.NoteRepository;
 import com.example.androidnotes.repository.NoteRepositoryImpl;
 
-import org.joda.time.DateTime;
-import org.json.JSONArray;
-import org.json.JSONObject;
-
-import java.io.BufferedReader;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
-import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.stream.Collectors;
 
@@ -202,19 +191,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         else
             setTitle("Android Notes");
         try {
-            FileOutputStream fos = getApplicationContext().
-                    openFileOutput(getString(R.string.file_name), Context.MODE_PRIVATE);
-            PrintWriter printWriter = new PrintWriter(fos);
-            printWriter.print(noteList);
-            printWriter.close();
-            fos.close();
-
-            FileOutputStream fos2 = getApplicationContext().
-                    openFileOutput(getString(R.string.delete_file_name), Context.MODE_PRIVATE);
-            PrintWriter printWriter2 = new PrintWriter(fos2);
-            printWriter2.print(deleteList);
-            printWriter2.close();
-            fos2.close();
+            this.notesRepository.saveNotes(R.string.file_name, noteList);
+            this.notesRepository.saveNotes(R.string.delete_file_name, deleteList);
         } catch (Exception e) {
             e.getStackTrace();
         }
