@@ -10,6 +10,7 @@ import com.google.gson.annotations.SerializedName;
 import org.joda.time.DateTime;
 
 import java.io.Serializable;
+import java.util.Objects;
 
 public class Note implements Serializable{
     @SerializedName("name")
@@ -18,7 +19,7 @@ public class Note implements Serializable{
     private final String description;
     @SerializedName("date")
     private final DateTime time;
-    private int pos;
+    private transient int pos;
     public Note(String name, DateTime time, String description) {
         this.name = name;
         this.time = time;
@@ -39,6 +40,19 @@ public class Note implements Serializable{
     }
     public void setPosition(int pos){this.pos = pos;}
     public int getPosition(){return pos;}
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Note note = (Note) o;
+        return Objects.equals(name, note.name) && Objects.equals(description, note.description) && Objects.equals(time, note.time);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(name, description, time);
+    }
 
     @NonNull
     public String toString() {

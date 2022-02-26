@@ -7,7 +7,6 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
 import java.io.BufferedReader;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -56,10 +55,9 @@ public class NoteRepositoryImpl implements NoteRepository {
     public void saveNotes(int file_name, ArrayList<Note> noteList) throws IOException {
         String json = this.gson.toJson(noteList);
 
-        try(FileOutputStream fos = this.wrapper.FileOutput(file_name)) {
-            PrintWriter printWriter = new PrintWriter(fos);
-            printWriter.print(json);
-            printWriter.close();
+        try(PrintWriter fos = this.wrapper.FileOutput(file_name)) {
+
+            fos.print(json);
         }
     }
 }
