@@ -9,6 +9,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.androidnotes.entities.Note;
+import com.example.androidnotes.extensions.StringExtensions;
 
 import java.util.List;
 
@@ -49,9 +50,9 @@ public class NoteAdapter extends RecyclerView.Adapter<ViewHolder> {
             des = des.substring(0, 80) + "...";
         }
 
-        int lineCount = Constants.GetLineCount(des);
+        int lineCount = StringExtensions.GetLineCount(des);
         if(lineCount > 3) {
-            des = Constants.GetSubLines(des, 3);
+            des = StringExtensions.GetSubLines(des, 3);
         }
 
         holder.description.setText(des);

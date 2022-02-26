@@ -1,6 +1,7 @@
 package com.example.androidnotes;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -24,6 +25,9 @@ import com.example.androidnotes.extensions.FileWrapper;
 import com.example.androidnotes.repository.NoteRepository;
 import com.example.androidnotes.repository.NoteRepositoryImpl;
 
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.stream.Collectors;
 
@@ -40,7 +44,18 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        FileWrapper wrapper = new FileWrapper(this);
+        FileWrapper wrapper = new FileWrapper() {
+            @Override
+            public InputStream FileInput(int file) throws FileNotFoundException {
+                return getApplicationContext().openFileInput(getString(file));
+            }
+
+            @Override
+            public FileOutputStream FileOutput(int fileId) throws FileNotFoundException {
+                return getApplicationContext()
+                        .openFileOutput(getString(fileId), Context.MODE_PRIVATE);
+            }
+        };
         notesRepository = new NoteRepositoryImpl(wrapper);
 
         noteList.addAll(loadFile().stream().sorted((x, y) -> y.getRawTime().compareTo(x.getRawTime())).collect(Collectors.toList()));

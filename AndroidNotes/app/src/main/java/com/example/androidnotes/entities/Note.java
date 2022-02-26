@@ -2,7 +2,7 @@ package com.example.androidnotes.entities;
 
 import androidx.annotation.NonNull;
 
-import com.example.androidnotes.Constants;
+import com.example.androidnotes.extensions.DateExtensions;
 import com.example.androidnotes.extensions.JsonExtensions;
 import com.google.gson.Gson;
 import com.google.gson.annotations.SerializedName;
@@ -35,7 +35,7 @@ public class Note implements Serializable{
         return time;
     }
     public String getShortTime(){
-        return Constants.dateToSimpleString(time);
+        return DateExtensions.dateToSimpleString(time);
     }
     public void setPosition(int pos){this.pos = pos;}
     public int getPosition(){return pos;}
