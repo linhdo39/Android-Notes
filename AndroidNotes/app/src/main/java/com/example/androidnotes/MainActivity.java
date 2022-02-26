@@ -26,8 +26,8 @@ import com.example.androidnotes.repository.NoteRepository;
 import com.example.androidnotes.repository.NoteRepositoryImpl;
 
 import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.InputStream;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.stream.Collectors;
 
@@ -51,9 +51,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             }
 
             @Override
-            public FileOutputStream FileOutput(int fileId) throws FileNotFoundException {
-                return getApplicationContext()
-                        .openFileOutput(getString(fileId), Context.MODE_PRIVATE);
+            public PrintWriter FileOutput(int fileId) throws FileNotFoundException {
+                return new PrintWriter(getApplicationContext()
+                        .openFileOutput(getString(fileId), Context.MODE_PRIVATE));
             }
         };
         notesRepository = new NoteRepositoryImpl(wrapper);
