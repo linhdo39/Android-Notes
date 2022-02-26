@@ -11,11 +11,9 @@ import android.widget.Toast;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
-import org.joda.time.DateTime;
+import com.example.androidnotes.entities.Note;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Locale;
+import org.joda.time.DateTime;
 
 public class EditNote extends AppCompatActivity {
     private EditText name;

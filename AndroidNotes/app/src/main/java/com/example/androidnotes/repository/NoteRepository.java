@@ -1,12 +1,12 @@
 package com.example.androidnotes.repository;
 
-import com.example.androidnotes.Note;
+import com.example.androidnotes.entities.Note;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
 public interface NoteRepository {
 
-    public ArrayList<Note> loadNotes(int fileId);
-    public ArrayList<Note> loadDeletedNotes();
-
+    ArrayList<Note> loadNotes(int fileId);
+    void saveNotes(int file_name, ArrayList<Note> noteList) throws IOException;
 }

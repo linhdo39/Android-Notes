@@ -12,18 +12,12 @@ import com.google.gson.JsonSerializer;
 import org.joda.time.DateTime;
 
 import java.lang.reflect.Type;
-import java.text.ParseException;
 
 public class DateTimeDeserializer
         implements JsonDeserializer<DateTime>, JsonSerializer<DateTime> {
     @Override
     public DateTime deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
-        try {
             return Constants.stringToDate(json.getAsString());
-        } catch (ParseException e) {
-            e.printStackTrace();
-            return new DateTime();
-        }
     }
 
     @Override
