@@ -6,6 +6,9 @@
     <string name="date_time">Time</string>
     <string name="no_file">No JSON Product File Present</string>
     <string name="file_name">Note.json</string>
+    <string name="existing_note">info</string>
+    <string name="note_position">position</string>
+    <string name="new_or_edited_note">existingNote</string>
     <string name="delete_file_name">Delete.json</string>
     <string name="description">Description</string>
     <string name="save">Save</string>
