@@ -9,6 +9,7 @@
     <string name="existing_note">info</string>
     <string name="note_position">position</string>
     <string name="new_or_edited_note">existingNote</string>
+    <string name="note_is_new">isNew</string>
     <string name="delete_file_name">Delete.json</string>
     <string name="description">Description</string>
     <string name="save">Save</string>

@@ -13,6 +13,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.androidnotes.R;
 import com.example.androidnotes.entities.Note;
+import com.example.androidnotes.entities.NoteContainer;
 
 import org.joda.time.DateTime;
 
@@ -93,10 +94,9 @@ public class NoteActivity extends AppCompatActivity {
             DateTime time = new DateTime();
             Note editNote = new Note(d1Text, time, d2Text);
             Intent data = new Intent();
-            data.putExtra(getString(R.string.new_or_edited_note), editNote);
-            data.putExtra("isNew", existingNote == null);
-            data.putExtra("pos", position);
-
+            NoteContainer container =
+                    new NoteContainer(editNote, position, existingNote == null);
+            data.putExtra(getString(R.string.new_or_edited_note), container);
             setResult(RESULT_OK, data);
             finish();
         }
