@@ -20,6 +20,7 @@ import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.androidnotes.activities.NoteActivity;
 import com.example.androidnotes.entities.Note;
 import com.example.androidnotes.extensions.FileWrapper;
 import com.example.androidnotes.repository.NoteRepository;
@@ -82,19 +83,22 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == R.id.add) {
-            Intent intent = new Intent(this, AddNote.class);
-            resultLauncher.launch(intent);
-            return true;
-        } else if (item.getItemId() == R.id.about) {
-            Intent intent = new Intent(this, About.class);
-            startActivity(intent);
-            return true;
-        } else if (item.getItemId() == R.id.undo) {
-            UndoDelete();
-            return true;
-        } else {
-            return super.onOptionsItemSelected(item);
+        switch (item.getItemId()) {
+            case R.id.add: {
+                Intent intent = new Intent(this, NoteActivity.class);
+                resultLauncher.launch(intent);
+                return true;
+            }
+            case R.id.about: {
+                Intent intent = new Intent(this, About.class);
+                startActivity(intent);
+                return true;
+            }
+            case R.id.undo:
+                UndoDelete();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
         }
     }
 
@@ -120,20 +124,19 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         Intent data = result.getData();
         if (result.getResultCode() == Activity.RESULT_OK) {
-            if (data.hasExtra("new")) {
-                Note newNote = (Note) data.getSerializableExtra("new");
+            if (data.hasExtra(getString(R.string.new_or_edited_note))) {
+                Note newNote = (Note) data.getSerializableExtra(getString(R.string.new_or_edited_note));
+                boolean isNew = data.getBooleanExtra("isNew", false);
+                if (!isNew) {
+                    int pos = data.getIntExtra("pos", 0);
+                    noteList.remove(pos);
+                    adapter.notifyItemRemoved(pos);
+                }
                 noteList.add(0, newNote);
                 saveNote();
                 adapter.notifyItemInserted(0);
-            } else if (data.hasExtra("edit") && data.hasExtra("pos")) {
-                Note editNote = (Note) data.getSerializableExtra("edit");
-                int pos = data.getIntExtra("pos", 0);
-                noteList.remove(pos);
-                adapter.notifyItemRemoved(pos);
-                noteList.add(0, editNote);
-                adapter.notifyItemInserted(0);
-                saveNote();
-            } else
+
+            }  else
                 Log.d(TAG, "handleNewNote: no new note");
         }
     }
@@ -159,9 +162,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void onClick(View v) {
         int pos = recyclerView.getChildLayoutPosition(v);
         Note temp = noteList.get(pos);
-        Intent intent = new Intent(this, EditNote.class);
-        intent.putExtra("info", temp);
-        intent.putExtra("position", pos);
+        Intent intent = new Intent(this, NoteActivity.class);
+        intent.putExtra(getString(R.string.existing_note), temp);
+        intent.putExtra(getString(R.string.note_position), pos);
         resultLauncher.launch(intent);
     }
 
