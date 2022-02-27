@@ -20,6 +20,8 @@ public class Note implements Serializable{
     @SerializedName("date")
     private final DateTime time;
     private transient int pos;
+    @SerializedName("type")
+    private NoteType noteType;
     public Note(String name, DateTime time, String description) {
         this.name = name;
         this.time = time;
