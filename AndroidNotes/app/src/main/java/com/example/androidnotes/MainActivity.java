@@ -26,6 +26,8 @@ import com.example.androidnotes.entities.NoteContainer;
 import com.example.androidnotes.extensions.FileWrapper;
 import com.example.androidnotes.repository.NoteRepository;
 import com.example.androidnotes.repository.NoteRepositoryImpl;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.navigation.NavigationBarView;
 
 import java.io.FileNotFoundException;
 import java.io.InputStream;
@@ -40,7 +42,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private final ArrayList<Note> deleteList = new ArrayList<>();
     private ActivityResultLauncher<Intent> resultLauncher;
     private NoteRepository notesRepository;
-
+    private BottomNavigationView bottomNavigationView;;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -73,7 +75,27 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         resultLauncher = registerForActivityResult(
                 new ActivityResultContracts.StartActivityForResult(),
                 this::handleNewNote);
+        bottomNavigationView = findViewById(R.id.bottomNavigationView);
 
+        bottomNavigationView.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                return onNavigationSelected(item);
+            }
+        });
+
+    }
+
+    private boolean onNavigationSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.notes:
+                Log.d(TAG, "notes selected");
+                break;
+            case R.id.tasks:
+                Log.d(TAG, "tasks selected");
+                break;
+        }
+        return false;
     }
 
     @Override
@@ -81,6 +103,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         getMenuInflater().inflate(R.menu.option_menu, menu);
         return true;
     }
+
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
