@@ -22,6 +22,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.androidnotes.activities.NoteActivity;
 import com.example.androidnotes.entities.Note;
+import com.example.androidnotes.entities.NoteContainer;
 import com.example.androidnotes.extensions.FileWrapper;
 import com.example.androidnotes.repository.NoteRepository;
 import com.example.androidnotes.repository.NoteRepositoryImpl;
@@ -30,7 +31,6 @@ import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.io.PrintWriter;
 import java.util.ArrayList;
-import java.util.stream.Collectors;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener, View.OnLongClickListener {
     private static final String TAG = "MainActivity";
@@ -59,10 +59,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         };
         notesRepository = new NoteRepositoryImpl(wrapper);
 
-        noteList.addAll(loadFile().stream().sorted((x, y) -> y.getRawTime().compareTo(x.getRawTime())).collect(Collectors.toList()));
-        //noteList.addAll(loadFile());
-        if(!noteList.isEmpty())
-            setTitle("Android Notes (" + noteList.size()+")");
+        //noteList.addAll(loadFile().stream().sorted((x, y) -> y.getRawTime().compareTo(x.getRawTime())).collect(Collectors.toList()));
+        noteList.addAll(loadFile());
+        if(!noteList.isEmpty()) {
+            setTitle("Android Notes (" + noteList.size() + ")");
+        }
 
         recyclerView = findViewById(R.id.noteView);
         adapter = new NoteAdapter(noteList, this);
@@ -125,16 +126,17 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         Intent data = result.getData();
         if (result.getResultCode() == Activity.RESULT_OK) {
             if (data.hasExtra(getString(R.string.new_or_edited_note))) {
-                Note newNote = (Note) data.getSerializableExtra(getString(R.string.new_or_edited_note));
-                boolean isNew = data.getBooleanExtra("isNew", false);
+                NoteContainer newNote = (NoteContainer) data.getSerializableExtra(getString(R.string.new_or_edited_note));
+                boolean isNew = newNote.isNew();
+                int targetPosition = 0;
                 if (!isNew) {
-                    int pos = data.getIntExtra("pos", 0);
-                    noteList.remove(pos);
-                    adapter.notifyItemRemoved(pos);
+                    targetPosition = newNote.getPosition();
+                    noteList.remove(targetPosition);
+                    adapter.notifyItemRemoved(targetPosition);
                 }
-                noteList.add(0, newNote);
+                noteList.add(targetPosition, newNote.getNote());
                 saveNote();
-                adapter.notifyItemInserted(0);
+                adapter.notifyItemInserted(targetPosition);
 
             }  else
                 Log.d(TAG, "handleNewNote: no new note");
@@ -146,8 +148,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         noteList.clear();
         noteList.addAll(loadFile());
         deleteList.addAll(loadDelete());
-        if (!noteList.isEmpty())
+        if (!noteList.isEmpty()) {
             setTitle("Android Notes (" + noteList.size() + ")");
+
+        }
         super.onResume();
 
     }
