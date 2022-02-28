@@ -14,6 +14,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.example.androidnotes.R;
 import com.example.androidnotes.entities.Note;
 import com.example.androidnotes.entities.NoteContainer;
+import com.example.androidnotes.entities.NoteType;
 
 import org.joda.time.DateTime;
 
@@ -92,7 +93,7 @@ public class NoteActivity extends AppCompatActivity {
             String d2Text = description.getText().toString();
             int position = getIntent().getIntExtra(getString(R.string.note_position), 0);
             DateTime time = new DateTime();
-            Note editNote = new Note(d1Text, time, d2Text);
+            Note editNote = new Note(d1Text, time, d2Text, NoteType.Note, false);
             Intent data = new Intent();
             NoteContainer container =
                     new NoteContainer(editNote, position, existingNote == null);

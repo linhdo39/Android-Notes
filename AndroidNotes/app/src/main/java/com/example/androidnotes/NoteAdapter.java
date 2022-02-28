@@ -32,8 +32,8 @@ public class NoteAdapter extends RecyclerView.Adapter<ViewHolder> {
         View itemView = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.note_list, parent, false);
 
-        itemView.setOnClickListener((View.OnClickListener) mainAct);
-        itemView.setOnLongClickListener((View.OnLongClickListener) mainAct);
+        itemView.setOnClickListener(mainAct);
+        itemView.setOnLongClickListener(mainAct);
 
         return new ViewHolder(itemView);
     }
@@ -49,15 +49,11 @@ public class NoteAdapter extends RecyclerView.Adapter<ViewHolder> {
         if(des.length()>=80) {
             des = des.substring(0, 80) + "...";
         }
-
         int lineCount = StringExtensions.GetLineCount(des);
         if(lineCount > 3) {
             des = StringExtensions.GetSubLines(des, 3);
         }
-
         holder.description.setText(des);
-
-        //holder.date.setText(new Date().toString());
         holder.date.setText(note.getShortTime());
     }
 

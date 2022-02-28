@@ -19,13 +19,18 @@ public class Note implements Serializable{
     private final String description;
     @SerializedName("date")
     private final DateTime time;
-    private transient int pos;
     @SerializedName("type")
-    private NoteType noteType;
-    public Note(String name, DateTime time, String description) {
+    private final NoteType noteType;
+    @SerializedName("taskComplete")
+    private final boolean taskComplete;
+    private transient int pos;
+
+    public Note(String name, DateTime time, String description, NoteType noteType, boolean taskComplete) {
         this.name = name;
         this.time = time;
         this.description = description;
+        this.noteType = noteType;
+        this.taskComplete = taskComplete;
     }
 
     public String getDescription() {

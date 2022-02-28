@@ -27,12 +27,12 @@ import com.example.androidnotes.extensions.FileWrapper;
 import com.example.androidnotes.repository.NoteRepository;
 import com.example.androidnotes.repository.NoteRepositoryImpl;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.google.android.material.navigation.NavigationBarView;
 
 import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.stream.Collectors;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener, View.OnLongClickListener {
     private static final String TAG = "MainActivity";
@@ -61,8 +61,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         };
         notesRepository = new NoteRepositoryImpl(wrapper);
 
-        //noteList.addAll(loadFile().stream().sorted((x, y) -> y.getRawTime().compareTo(x.getRawTime())).collect(Collectors.toList()));
-        noteList.addAll(loadFile());
+        noteList.addAll(
+                loadFile()
+                        .stream()
+                        .sorted(
+                                (x, y) ->
+                                       y.getRawTime().compareTo(x.getRawTime())
+                        //        y.getName().compareTo(x.getName())
+                        )
+                        .collect(Collectors.toList()));
+        //noteList.addAll(loadFile());
         if(!noteList.isEmpty()) {
             setTitle("Android Notes (" + noteList.size() + ")");
         }
@@ -77,12 +85,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 this::handleNewNote);
         bottomNavigationView = findViewById(R.id.bottomNavigationView);
 
-        bottomNavigationView.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
-            @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                return onNavigationSelected(item);
-            }
-        });
+        bottomNavigationView.setOnItemSelectedListener(this::onNavigationSelected);
+
+        adapter.notifyDataSetChanged();
 
     }
 
@@ -93,6 +98,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 break;
             case R.id.tasks:
                 Log.d(TAG, "tasks selected");
+                break;
+            case R.id.openTasks:
+                Log.d(TAG, "open tasks selected");
                 break;
         }
         return false;
