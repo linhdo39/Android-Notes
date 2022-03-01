@@ -20,4 +20,8 @@
     <string name="contribute">Contributors:  </string>
     <string name="contributors">Mike Maloney \nDave Patel \nSebastian Savovic </string>
     <string name="version"> Version 1.1</string>
+    <string name="notes">Notes</string>
+    <string name="open_tasks">Open Tasks</string>
+    <string name="tasks">Tasks</string>
+    <string name="cancel">Cancel</string>
 </resources>

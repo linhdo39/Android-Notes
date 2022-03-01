@@ -47,6 +47,8 @@ public class Note implements Serializable{
     }
     public void setPosition(int pos){this.pos = pos;}
     public int getPosition(){return pos;}
+    public NoteType getNoteType() { return noteType; }
+    public boolean isTaskComplete() { return taskComplete; }
 
     @Override
     public boolean equals(Object o) {
