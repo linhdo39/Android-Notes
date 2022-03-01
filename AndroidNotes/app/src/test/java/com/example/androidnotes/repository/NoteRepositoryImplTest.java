@@ -4,6 +4,7 @@ import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 
 import com.example.androidnotes.entities.Note;
+import com.example.androidnotes.entities.NoteType;
 import com.example.androidnotes.extensions.FileWrapper;
 
 import org.joda.time.DateTime;
@@ -31,10 +32,35 @@ public class NoteRepositoryImplTest {
             "    \"date\": \"11/12/2021 15:51:54\"\n" +
             "  }\n" +
             "]\n";
+    private String jsonWithTypeAndDone = "[\n" +
+            "  {\n" +
+            "    \"name\": \"molestie i\",\n" +
+            "    \"description\": \"molestie in faucibus iaculis rhoncus ut nunc ipsum posuere vivamus in habitasse convallis non \",\n" +
+            "    \"date\": \"11/12/2021 15:51:54\",\n" +
+            "    \"type\": \"Note\",\n" +
+            "    \"taskComplete\": false\n" +
+            "  }\n" +
+            "]\n";
+
+    private String jsonWithTypeAndDone2 = "[\n" +
+            "  {\n" +
+            "    \"name\": \"molestie i\",\n" +
+            "    \"description\": \"molestie in faucibus iaculis rhoncus ut nunc ipsum posuere vivamus in habitasse convallis non \",\n" +
+            "    \"date\": \"11/12/2021 15:51:54\",\n" +
+            "    \"type\": \"Task\",\n" +
+            "    \"taskComplete\": true\n" +
+            "  }\n" +
+            "]\n";
 
     private Note noteReference = new Note("molestie i",
             new DateTime(2021, 11, 12, 15, 51, 54),
-            "molestie in faucibus iaculis rhoncus ut nunc ipsum posuere vivamus in habitasse convallis non ");
+            "molestie in faucibus iaculis rhoncus ut nunc ipsum posuere vivamus in habitasse convallis non ",
+            NoteType.Note, false);
+
+    private Note noteReference2 = new Note("molestie i",
+            new DateTime(2021, 11, 12, 15, 51, 54),
+            "molestie in faucibus iaculis rhoncus ut nunc ipsum posuere vivamus in habitasse convallis non ",
+            NoteType.Task, true);
 
     @Before
     public void setUp() throws Exception {
@@ -81,11 +107,22 @@ public class NoteRepositoryImplTest {
     }
 
     @Test
+    public void loadNotesWithTask() {
+        outputStreamWriter.print(jsonWithTypeAndDone2);
+        outputStreamWriter.close();
+
+        ArrayList<Note> notes = noteRepository.loadNotes(1);
+        ArrayList<Note> expectedNotes = new ArrayList<>();
+        expectedNotes.add(noteReference2);
+        assertArrayEquals(expectedNotes.toArray(), notes.toArray());
+    }
+
+    @Test
     public void saveNotes() throws Exception {
         ArrayList<Note> expectedNotes = new ArrayList<>();
         expectedNotes.add(noteReference);
         noteRepository.saveNotes(1, expectedNotes);
         String result = NoteRepositoryImpl.convertStreamToString(inputStream);
-        assertEquals(json, result);
+        assertEquals(jsonWithTypeAndDone, result);
     }
 }

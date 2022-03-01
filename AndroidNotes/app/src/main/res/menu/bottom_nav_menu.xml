@@ -6,8 +6,13 @@
         android:icon="@android:drawable/ic_menu_gallery"
         />
     <item
+        android:id="@+id/openTasks"
+        android:title="Open Tasks"
+        android:icon="@android:drawable/btn_radio"/>
+    <item
         android:id="@+id/tasks"
         android:title="Tasks"
         android:icon="@android:drawable/ic_menu_preferences"
         />
+
 </menu>
