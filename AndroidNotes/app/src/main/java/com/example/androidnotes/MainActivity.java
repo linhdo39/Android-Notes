@@ -42,7 +42,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private final ArrayList<Note> deleteList = new ArrayList<>();
     private ActivityResultLauncher<Intent> resultLauncher;
     private NoteRepository notesRepository;
-    private BottomNavigationView bottomNavigationView;;
+    private BottomNavigationView bottomNavigationView;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

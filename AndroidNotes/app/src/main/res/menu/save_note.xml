@@ -8,6 +8,6 @@
         android:title="@string/save"
         app:showAsAction="always" />
     <item android:id="@+id/cancel"
-        android:title="Cancel"
+        android:title="@string/cancel"
         />
 </menu>

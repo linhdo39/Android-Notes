@@ -2,16 +2,16 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
         android:id="@+id/notes"
-        android:title="Notes"
+        android:title="@string/notes"
         android:icon="@android:drawable/ic_menu_gallery"
         />
     <item
         android:id="@+id/openTasks"
-        android:title="Open Tasks"
+        android:title="@string/open_tasks"
         android:icon="@android:drawable/btn_radio"/>
     <item
         android:id="@+id/tasks"
-        android:title="Tasks"
+        android:title="@string/tasks"
         android:icon="@android:drawable/ic_menu_preferences"
         />
 
