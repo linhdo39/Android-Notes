@@ -23,7 +23,9 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.androidnotes.activities.NoteActivity;
 import com.example.androidnotes.entities.Note;
 import com.example.androidnotes.entities.NoteContainer;
+import com.example.androidnotes.entities.NoteType;
 import com.example.androidnotes.extensions.FileWrapper;
+import com.example.androidnotes.extensions.StringExtensions;
 import com.example.androidnotes.repository.NoteRepository;
 import com.example.androidnotes.repository.NoteRepositoryImpl;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -43,6 +45,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private ActivityResultLauncher<Intent> resultLauncher;
     private NoteRepository notesRepository;
     private BottomNavigationView bottomNavigationView;
+    private boolean completedTasks;
+    private NoteType selectedNoteType;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -66,14 +70,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         .stream()
                         .sorted(
                                 (x, y) ->
-                                       y.getRawTime().compareTo(x.getRawTime())
-                        //        y.getName().compareTo(x.getName())
+                         //              y.getRawTime().compareTo(x.getRawTime())
+                                x.getName().compareTo(y.getName())
                         )
                         .collect(Collectors.toList()));
         //noteList.addAll(loadFile());
-        if(!noteList.isEmpty()) {
-            setTitle("Android Notes (" + noteList.size() + ")");
-        }
+        selectedNoteType = NoteType.Note;
+        setTitle(StringExtensions.getTitleName(this.selectedNoteType, this.noteList.size(), completedTasks));
 
         recyclerView = findViewById(R.id.noteView);
         adapter = new NoteAdapter(noteList, this);
@@ -94,15 +97,22 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private boolean onNavigationSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.notes:
+                this.selectedNoteType = NoteType.Note;
                 Log.d(TAG, "notes selected");
                 break;
             case R.id.tasks:
+                this.selectedNoteType = NoteType.Task;
+                completedTasks = true;
                 Log.d(TAG, "tasks selected");
                 break;
             case R.id.openTasks:
+                this.selectedNoteType = NoteType.Task;
+                completedTasks = false;
                 Log.d(TAG, "open tasks selected");
                 break;
         }
+        setTitle(StringExtensions.getTitleName(this.selectedNoteType, this.noteList.size(), completedTasks));
+
         return false;
     }
 
@@ -179,10 +189,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         noteList.clear();
         noteList.addAll(loadFile());
         deleteList.addAll(loadDelete());
-        if (!noteList.isEmpty()) {
-            setTitle("Android Notes (" + noteList.size() + ")");
-
-        }
+        setTitle(StringExtensions.getTitleName(this.selectedNoteType, this.noteList.size(), completedTasks));
         super.onResume();
 
     }
@@ -233,10 +240,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void saveNote() {
-        if (!noteList.isEmpty())
-            setTitle("Android Notes (" + noteList.size() + ")");
-        else
-            setTitle("Android Notes");
+        setTitle(StringExtensions.getTitleName(this.selectedNoteType, this.noteList.size(), completedTasks));
         try {
             this.notesRepository.saveNotes(R.string.file_name, noteList);
             this.notesRepository.saveNotes(R.string.delete_file_name, deleteList);
