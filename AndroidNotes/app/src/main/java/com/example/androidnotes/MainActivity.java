@@ -70,8 +70,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         .stream()
                         .sorted(
                                 (x, y) ->
-                         //              y.getRawTime().compareTo(x.getRawTime())
-                                x.getName().compareTo(y.getName())
+                                        //              y.getRawTime().compareTo(x.getRawTime())
+                                        x.getName().compareTo(y.getName())
                         )
                         .collect(Collectors.toList()));
         //noteList.addAll(loadFile());
@@ -89,9 +89,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         bottomNavigationView = findViewById(R.id.bottomNavigationView);
 
         bottomNavigationView.setOnItemSelectedListener(this::onNavigationSelected);
-
-        adapter.notifyDataSetChanged();
-
+        
     }
 
     private boolean onNavigationSelected(MenuItem item) {
