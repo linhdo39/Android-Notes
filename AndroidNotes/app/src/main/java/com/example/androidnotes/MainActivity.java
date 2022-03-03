@@ -102,6 +102,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             case R.id.openTasks:
                 Log.d(TAG, "open tasks selected");
                 break;
+                //case R.id.
         }
         return false;
     }
@@ -128,6 +129,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             }
             case R.id.undo:
                 UndoDelete();
+                return true;
+            case R.id.addTask:
+                Intent intent = new Intent(this, About.class);
+                resultLauncher.launch(intent);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

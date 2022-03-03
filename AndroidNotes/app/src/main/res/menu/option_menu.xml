@@ -13,7 +13,12 @@
         android:title="@string/add_note"
         app:showAsAction="collapseActionView" />
     <item
+        android:id="@+id/addTask"
+        android:title="Add Task"
+        app:showAsAction="collapseActionView" />
+    <item
         android:id="@+id/undo"
         android:title="@string/undo"
         app:showAsAction="collapseActionView" />
+
 </menu>
