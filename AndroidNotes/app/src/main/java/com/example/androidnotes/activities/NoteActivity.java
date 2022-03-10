@@ -51,13 +51,10 @@ public class NoteActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int selection = item.getItemId();
-        switch(selection) {
-            case R.id.save:
-                doReturnData();
-                break;
-            case R.id.cancel:
-                this.onBackPressed();
-                break;
+        if (selection == R.id.save) {
+            doReturnData();
+        } else if (selection == R.id.cancel) {
+            this.onBackPressed();
         }
         return false;
     }

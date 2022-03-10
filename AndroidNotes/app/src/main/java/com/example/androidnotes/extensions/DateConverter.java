@@ -10,7 +10,7 @@ import org.joda.time.DateTime;
 import java.lang.reflect.Type;
 
 public class DateConverter {
-    private static Gson gson = new Gson();
+    private static final Gson gson = new Gson();
 
     @TypeConverter
     public static DateTime stringToDate(String data) {

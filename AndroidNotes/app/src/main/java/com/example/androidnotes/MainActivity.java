@@ -34,6 +34,7 @@ import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.stream.Collectors;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener, View.OnLongClickListener {
@@ -69,9 +70,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 loadFile()
                         .stream()
                         .sorted(
-                                (x, y) ->
-                                        //              y.getRawTime().compareTo(x.getRawTime())
-                                        x.getName().compareTo(y.getName())
+                                Comparator.comparing(Note::getRawTime)
                         )
                         .collect(Collectors.toList()));
         //noteList.addAll(loadFile());
@@ -93,22 +92,19 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private boolean onNavigationSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.notes:
-                this.selectedNoteType = NoteType.Note;
-                Log.d(TAG, "notes selected");
-                break;
-            case R.id.tasks:
-                this.selectedNoteType = NoteType.Task;
-                completedTasks = true;
-                Log.d(TAG, "tasks selected");
-                break;
-            case R.id.openTasks:
-                this.selectedNoteType = NoteType.Task;
-                completedTasks = false;
-                Log.d(TAG, "open tasks selected");
-                break;
-                //case R.id.
+        int itemId = item.getItemId();
+        if (itemId == R.id.notes) {
+            this.selectedNoteType = NoteType.Note;
+            Log.d(TAG, "notes selected");
+        } else if (itemId == R.id.tasks) {
+            this.selectedNoteType = NoteType.Task;
+            completedTasks = true;
+            Log.d(TAG, "tasks selected");
+        } else if (itemId == R.id.openTasks) {
+            this.selectedNoteType = NoteType.Task;
+            completedTasks = false;
+            Log.d(TAG, "open tasks selected");
+            //case R.id.
         }
         setTitle(StringExtensions.getTitleName(this.selectedNoteType, this.noteList.size(), completedTasks));
 
@@ -124,27 +120,24 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.add: {
-                Intent intent = new Intent(this, NoteActivity.class);
-                resultLauncher.launch(intent);
-                return true;
-            }
-            case R.id.about: {
-                Intent intent = new Intent(this, About.class);
-                startActivity(intent);
-                return true;
-            }
-            case R.id.undo:
-                UndoDelete();
-                return true;
-            case R.id.addTask:
-                Intent intent = new Intent(this, About.class);
-                resultLauncher.launch(intent);
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
+        int itemId = item.getItemId();
+        if (itemId == R.id.add) {
+            Intent intent = new Intent(this, NoteActivity.class);
+            resultLauncher.launch(intent);
+            return true;
+        } else if (itemId == R.id.about) {
+            Intent intent = new Intent(this, About.class);
+            startActivity(intent);
+            return true;
+        } else if (itemId == R.id.undo) {
+            UndoDelete();
+            return true;
+        } else if (itemId == R.id.addTask) {
+            Intent intent = new Intent(this, About.class);
+            resultLauncher.launch(intent);
+            return true;
         }
+        return super.onOptionsItemSelected(item);
     }
 
     private void UndoDelete() {

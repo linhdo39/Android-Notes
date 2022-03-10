@@ -5,11 +5,11 @@ import android.content.Context;
 import androidx.room.Room;
 
 public class NotesDatabase {
-    private Context mCtx;
+    private final Context mCtx;
     private static NotesDatabase mInstance;
 
     //our app database object
-    private AppDatabase appDatabase;
+    private final AppDatabase appDatabase;
 
     private NotesDatabase(Context mCtx) {
         this.mCtx = mCtx;
